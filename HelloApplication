@@ -1,0 +1,31 @@
+/*
+* CCS Project - Memory Game Version 1.0
+*
+* This is a memory game written in java, using javafx library.
+*
+* Author: Paul Ryan Alducente
+* Date: April 1, 2025
+* */
+
+import javafx.application.Application;
+import javafx.stage.Stage;
+import java.io.IOException;
+
+public class HelloApplication extends Application {
+    @Override
+    public void start(Stage stage) throws IOException {
+
+        //View for the welcome screen
+        MainView mainScreenLayout = new MainView(stage);
+
+        //Setting the Stage
+        stage.setTitle("ALDZ MEMORY GAME");
+        stage.setResizable(false);
+        stage.setScene(mainScreenLayout.getScene());
+        stage.show(); // This shows the Stage
+    }
+
+    public static void main(String[] args) {
+        launch();
+    }
+}

@@ -2,6 +2,7 @@ import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -89,11 +90,12 @@ public class CardGrid extends GridPane {
         // Configure animations and click logic
         ScaleTransition scaleTransition = createScaleTransition(card, frontSide, backSide);
         card.setOnMouseClicked(clickEvent -> {
-            if (controller.getFlippedCards() < 2 && !card.isFlipped()) {
-                controller.handleCardClick(card); // Add card to flipped list
+            if (this.controller.getFlippedCardCount() < 2 && !card.isFlipped()) {
+                this.controller.handleCardClick(card); // Add card to flipped list
                 scaleTransition.play();
                 card.flip(); // Flip the card
-                if (controller.getFlippedCards() == 2) {
+                winMessage();
+                if (this.controller.getFlippedCardCount() == 2) {
                     checkAndFlipBack(); // Check match and flip back if necessary
                 }
             }
@@ -131,9 +133,9 @@ public class CardGrid extends GridPane {
     private void checkAndFlipBack() {
         PauseTransition pause = new PauseTransition(Duration.seconds(1)); // Delay for visibility
         pause.setOnFinished(event -> {
-            if (!controller.getResult()) {
+            if (!this.controller.hasMatchResult()) {
                 // Flip both cards back if they don't match
-                for (Card flippedCard : controller.getCardsFlipped()) {
+                for (Card flippedCard : this.controller.getFlippedCards()) {
                     toggleCardVisibility(
                             (ImageView) flippedCard.getChildren().get(1),
                             (Rectangle) flippedCard.getChildren().get(0)
@@ -144,8 +146,11 @@ public class CardGrid extends GridPane {
                     reverseTransition.play();
                 }
             }
-            controller.clearFlippedCards(); // Reset the controller's flipped cards list
-            controller.resetResult();
+
+            // Clear the list of flipped cards
+            this.controller.clearFlippedCards();
+            // Reset the controller's previous result
+            this.controller.resetMatchResult();
         });
         pause.play();
     }
@@ -173,5 +178,24 @@ public class CardGrid extends GridPane {
      */
     public List<Card> getCards() {
         return cards;
+    }
+
+
+    /**
+     * This is a method that prints a message when all the cards are matched.
+     */
+    public void winMessage(){
+        int points = 0;
+        for (Card status : this.getCards()){
+            if(status.isMatched()){
+                points++;
+            }
+        }
+        if(points == 16){
+            Alert msg = new Alert(Alert.AlertType.INFORMATION);
+            msg.setTitle("Congratulations");
+            msg.setContentText("You have a brain like Einstein!!!");
+            msg.show();
+        }
     }
 }

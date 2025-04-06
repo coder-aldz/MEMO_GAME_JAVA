@@ -6,6 +6,7 @@ import java.util.List;
  * and determining matches in a card-matching game.
  */
 public class GameController {
+
     // List to keep track of currently flipped cards
     private final List<Card> flippedCards = new ArrayList<>();
     // Flag to indicate if the last pair of cards matched
@@ -32,7 +33,7 @@ public class GameController {
      * @return A list of flipped cards.
      */
     public List<Card> getFlippedCards() {
-        return new ArrayList<>(flippedCards); // Return a copy to protect encapsulation
+        return flippedCards; // Return a copy to protect encapsulation
     }
 
     /**
@@ -71,9 +72,6 @@ public class GameController {
             card1.flip();
             card2.flip();
         }
-
-        // Clear the flipped cards after checking
-        clearFlippedCards();
     }
 
     /**

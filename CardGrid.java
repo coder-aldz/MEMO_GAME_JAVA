@@ -1,5 +1,3 @@
-package memoapp.memo_final;
-
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.geometry.Insets;
@@ -15,68 +13,101 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * CardGrid represents the grid of cards in the memory game.
+ * It initializes the grid layout, card components, and handles animations and game logic.
+ */
 public class CardGrid extends GridPane {
-    private List<Card> cards;
-    private GameController controller;
+    // List of cards to be displayed in the grid
+    private final List<Card> cards;
 
+    // Controller to manage game logic and flipped cards
+    private final GameController controller;
+
+    /**
+     * Constructs the CardGrid with the specified grid size.
+     *
+     * @param gridSize The number of cards to display in the grid.
+     */
     public CardGrid(int gridSize) {
         this.cards = new ArrayList<>();
+        this.controller = new GameController();
 
+        // Grid layout settings
         this.setHgap(5);
         this.setVgap(5);
         this.setPadding(new Insets(50, 50, 50, 50));
         this.setAlignment(Pos.CENTER);
 
+        // Initialize the grid and its components
         this.initializeGrid(gridSize);
         this.initializeCards();
-
-        controller = new GameController();
     }
 
+    /**
+     * Initializes the grid by creating card pairs and shuffling them.
+     *
+     * @param gridSize The total number of cards in the grid.
+     */
     public void initializeGrid(int gridSize) {
         for (int i = 0; i < gridSize; i++) {
-            cards.add(new Card(i / 2, "img_"+(i/2)+".png")); // Add card pairs
+            cards.add(new Card(i / 2, "img_" + (i / 2) + ".png")); // Add card pairs
         }
-        Collections.shuffle(cards);
+        Collections.shuffle(cards); // Randomize card order
     }
 
+    /**
+     * Adds card components to the grid and sets their positions.
+     */
     private void initializeCards() {
         int uniqueIndex = 0;
         for (Card card : this.getCards()) {
-            createCardComponents(card); // Method for adding card visuals and animation logic
-            add(card, uniqueIndex % 4, uniqueIndex / 4); // Add card to grid
+            createCardComponents(card); // Add card visuals and logic
+            add(card, uniqueIndex % 4, uniqueIndex / 4); // Arrange cards in a grid (4 columns)
             uniqueIndex++;
         }
     }
 
+    /**
+     * Creates components for a card, including its animations and click handling.
+     *
+     * @param card The card to be configured.
+     */
     private void createCardComponents(Card card) {
         Image img = new Image(getClass().getResource(card.getImagePath()).toExternalForm());
-        ImageView frontSide = new ImageView(img);
-        Rectangle backSide = new Rectangle(80, 100, Color.ORANGE);
+        ImageView frontSide = new ImageView(img); // Front side of the card
+        Rectangle backSide = new Rectangle(80, 100, Color.ORANGE); // Back side of the card
 
-        //Setting the cards to be facing down
+        // Set default visibility (cards facing down initially)
         frontSide.setVisible(false);
         backSide.setVisible(true);
 
+        // Add visual elements to the card
         card.getChildren().addAll(backSide, frontSide);
-        card.getStyleClass().add("cards");
+        card.getStyleClass().add("cards"); // Apply CSS styles
 
-        // Set up animations
+        // Configure animations and click logic
         ScaleTransition scaleTransition = createScaleTransition(card, frontSide, backSide);
         card.setOnMouseClicked(clickEvent -> {
             if (controller.getFlippedCards() < 2 && !card.isFlipped()) {
-                controller.handleCardClick(card); // Add card to flipped cards in the controller
+                controller.handleCardClick(card); // Add card to flipped list
                 scaleTransition.play();
-                card.flip();
-                System.out.println(card.getCardID());
+                card.flip(); // Flip the card
                 if (controller.getFlippedCards() == 2) {
-                    System.out.println(controller.getResult());
-                    checkAndFlipBack(); // Check the two flipped cards and flip back if needed
+                    checkAndFlipBack(); // Check match and flip back if necessary
                 }
             }
         });
     }
 
+    /**
+     * Creates a scale animation for flipping the card.
+     *
+     * @param card      The card to be animated.
+     * @param frontSide The front side of the card.
+     * @param backSide  The back side of the card.
+     * @return The configured ScaleTransition object.
+     */
     private ScaleTransition createScaleTransition(Card card, ImageView frontSide, Rectangle backSide) {
         ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.2), card);
         scaleTransition.setFromX(1);
@@ -93,27 +124,38 @@ public class CardGrid extends GridPane {
         return scaleTransition;
     }
 
+    /**
+     * Checks the two flipped cards for a match and flips them back if they don't match.
+     * Includes a delay to allow the user to see the cards before flipping back.
+     */
     private void checkAndFlipBack() {
-        // Delay to allow the user to see the cards before flipping back
-        PauseTransition pause = new PauseTransition(Duration.seconds(1));
+        PauseTransition pause = new PauseTransition(Duration.seconds(1)); // Delay for visibility
         pause.setOnFinished(event -> {
             if (!controller.getResult()) {
                 // Flip both cards back if they don't match
                 for (Card flippedCard : controller.getCardsFlipped()) {
-                    toggleCardVisibility((ImageView) flippedCard.getChildren().get(1),
-                            (Rectangle) flippedCard.getChildren().get(0));
+                    toggleCardVisibility(
+                            (ImageView) flippedCard.getChildren().get(1),
+                            (Rectangle) flippedCard.getChildren().get(0)
+                    );
                     ScaleTransition reverseTransition = new ScaleTransition(Duration.seconds(0.2), flippedCard);
                     reverseTransition.setFromX(0);
                     reverseTransition.setToX(1);
                     reverseTransition.play();
                 }
             }
-            controller.clearFlippedCards(); // Clear the flipped cards list in the controller
+            controller.clearFlippedCards(); // Reset the controller's flipped cards list
             controller.resetResult();
         });
         pause.play();
     }
 
+    /**
+     * Toggles the visibility of the card's front and back sides.
+     *
+     * @param frontSide The front side of the card (image).
+     * @param backSide  The back side of the card (rectangle).
+     */
     private void toggleCardVisibility(ImageView frontSide, Rectangle backSide) {
         if (backSide.isVisible()) {
             backSide.setVisible(false);
@@ -124,6 +166,11 @@ public class CardGrid extends GridPane {
         }
     }
 
+    /**
+     * Gets the list of cards displayed in the grid.
+     *
+     * @return A list of Card objects.
+     */
     public List<Card> getCards() {
         return cards;
     }

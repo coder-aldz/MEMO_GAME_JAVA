@@ -1,3 +1,4 @@
+import javafx.scene.control.Alert;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -30,11 +31,18 @@ public class Card extends StackPane {
     public Card(int id, String imgPath) {
 
         // Added this check to make sure that the Image Path is never null and also the Card ID is never a negative.
-        if (id <= 0) {
-            throw new IllegalArgumentException("Card ID must be a positive integer.");
-        }
-        if (imgPath == null || imgPath.trim().isEmpty()) {
-            throw new IllegalArgumentException("Image path cannot be null or empty.");
+        try {
+            if (id < 0) {
+                throw new IllegalArgumentException("Card ID must be a positive integer.");
+            }
+            if (imgPath == null || imgPath.trim().isEmpty()) {
+                throw new IllegalArgumentException("Image path cannot be null or empty.");
+            }
+        } catch (IllegalArgumentException e) {
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("Error Message");
+            error.setContentText(e.getMessage());
+            error.show();
         }
 
         this.cardID = id;

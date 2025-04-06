@@ -1,0 +1,42 @@
+.root {
+    -fx-background-image: url("MViewBG.jpg");
+}
+
+.button {
+    -fx-background-color: linear-gradient(#00ff00, #007700); /* Green gradient */
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 15 30;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-cursor: hand; /* Pointer cursor for a game feel */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.7), 5, 0, 0, 1); /* Shadow effect */
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(#55ff55, #008800); /* Slightly brighter green on hover */
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1; /* Grows slightly on hover */
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(#007700, #00ff00); /* Inverted gradient */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.9), 7, 0, 0, 1); /* Deeper shadow on click */
+}
+
+.exit-button {
+    -fx-background-color: linear-gradient(#ff0000, #770000); /* Red gradient */
+    /* Rest of the styles can be similar */
+}
+
+.exit-button:hover {
+     -fx-background-color: linear-gradient(#ff5555, #880000); /* Slightly brighter green on hover */
+     -fx-scale-x: 1.1;
+     -fx-scale-y: 1.1; /* Grows slightly on hover */
+ }
+
+ .exit-button:pressed {
+     -fx-background-color: linear-gradient(#770000, #ff0000); /* Inverted gradient */
+     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.9), 7, 0, 0, 1); /* Deeper shadow on click */
+ }

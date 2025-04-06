@@ -1,31 +1,42 @@
-package memoapp.memo_final;
-
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class GameView extends VBox{
-    private Scene scene;
-    private CardGrid cardGrid;
+import java.util.Objects;
 
-    public GameView(Stage primaryStage){
+/**
+ * Represents the main game view in the memory game.
+ * The view displays the grid of cards and a button to return to the main screen.
+ */
+public class GameView extends VBox {
+    // Scene associated with this game view
+    private final Scene scene;
 
-        //This initiate the cards to be dealt during the game. 16 is the number of cards.
+    // Card grid containing the cards for the game
+    private final CardGrid cardGrid;
+
+    /**
+     * Constructs the GameView, setting up the card grid and back button.
+     *
+     * @param primaryStage The primary stage of the application, used for navigation.
+     */
+    public GameView(Stage primaryStage) {
+        // Initialize the card grid with 16 cards
         cardGrid = new CardGrid(16);
 
-        //Button to go back to the main screen
+        // Create a button to navigate back to the main screen
         Button backBtn = new Button("Back");
         backBtn.setOnAction(actionEvent -> primaryStage.setScene(new MainView(primaryStage).getScene()));
 
-        //This adds the both the exit button and the cards on the main layout which is VBox.
+        // Add the card grid and back button to the VBox layout
         this.getChildren().addAll(cardGrid, backBtn);
-        this.setSpacing(50);
-        this.setAlignment(Pos.CENTER);
+        this.setSpacing(50); // Set spacing between elements
+        this.setAlignment(Pos.CENTER); // Center elements in the VBox
 
-        //Add the VBox to the scene so that it will show on the screen.
+        // Create the scene and load associated CSS styles
         scene = new Scene(this, 1024, 780);
-        scene.getStylesheets().add(MainView.class.getResource("scene-2.css").toExternalForm()); //Loading the CSS file.
+        scene.getStylesheets().add(Objects.requireNonNull(MainView.class.getResource("scene-2.css")).toExternalForm());
     }
 }

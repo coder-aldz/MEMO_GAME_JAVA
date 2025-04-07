@@ -45,6 +45,6 @@ public class MainView extends VBox {
 
         // Initialize the scene with the VBox and load associated stylesheets
         scene = new Scene(this, 1024, 780);
-        scene.getStylesheets().add(MainView.class.getResource("scene-1.css").toExternalForm());
+        scene.getStylesheets().add(MainView.class.getResource("/resource/scene-1.css").toExternalForm());
     }
 }

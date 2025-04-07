@@ -37,6 +37,6 @@ public class GameView extends VBox {
 
         // Create the scene and load associated CSS styles
         scene = new Scene(this, 1024, 780);
-        scene.getStylesheets().add(Objects.requireNonNull(MainView.class.getResource("scene-2.css")).toExternalForm());
+        scene.getStylesheets().add(Objects.requireNonNull(MainView.class.getResource("/resource/scene-2.css")).toExternalForm());
     }
 }

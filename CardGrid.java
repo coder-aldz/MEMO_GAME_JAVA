@@ -75,7 +75,7 @@ public class CardGrid extends GridPane {
      * @param card The card to be configured.
      */
     private void createCardComponents(Card card) {
-        Image img = new Image(getClass().getResource(card.getImagePath()).toExternalForm());
+        Image img = new Image(getClass().getResource("/resource/"+card.getImagePath()).toExternalForm());
         ImageView frontSide = new ImageView(img); // Front side of the card
         Rectangle backSide = new Rectangle(80, 100, Color.ORANGE); // Back side of the card
 
